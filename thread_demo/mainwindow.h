@@ -18,6 +18,7 @@ public:
 private slots:
     void started();
     void finished();
+    void signal_done();
 
 private:
     Ui::MainWindow *ui;

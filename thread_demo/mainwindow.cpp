@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     thread->setObjectName("test_thread");
     connect(thread,SIGNAL(started()),this,SLOT(started()));
     connect(thread,SIGNAL(finished()),this,SLOT(finished()));
+
+    connect(thread,SIGNAL(well_done()),this,SLOT(signal_done()));
     thread->start();
 }
 void MainWindow::started(){
@@ -17,6 +19,9 @@ void MainWindow::started(){
 }
 void MainWindow::finished(){
     qDebug()<<"thread finished";
+}
+void MainWindow::signal_done(){
+    qDebug()<<"well done";
 }
 
 MainWindow::~MainWindow()

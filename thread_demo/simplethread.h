@@ -9,6 +9,8 @@ public:
     // 重写run方法
     void run();
     int count = 0;
+signals:
+    void well_done();
 };
 
 #endif // SIMPLETHREAD_H
