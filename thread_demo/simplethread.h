@@ -8,6 +8,7 @@ public:
     SimpleThread();
     // 重写run方法
     void run();
+    int count = 0;
 };
 
 #endif // SIMPLETHREAD_H

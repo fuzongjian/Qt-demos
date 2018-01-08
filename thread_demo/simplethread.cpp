@@ -5,8 +5,9 @@ SimpleThread::SimpleThread()
 
 }
 void SimpleThread::run(){
-    while(true){
-        qDebug()<<currentThread();
+    while(count <= 5){
+        count ++;
+        qDebug()<<currentThread()<<" id === "<<currentThreadId();
         sleep(5);
     }
 }

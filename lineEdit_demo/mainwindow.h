@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "simplethread.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -15,13 +15,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void started();
-    void finished();
-
 private:
     Ui::MainWindow *ui;
-    SimpleThread * thread;
+
+private slots:
+    void position_changed(int oldV,int newV);
+    void finish_edited();
+    void pressed_return();
+    void change_text(QString);
+    void edit_text(QString);
 };
 
 #endif // MAINWINDOW_H
