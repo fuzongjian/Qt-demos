@@ -14,9 +14,18 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
+<<<<<<< HEAD:thread_demo/thread_demo.pro
+    mythread.cpp \
+    myobject.cpp
+
+HEADERS  += mainwindow.h \
+    mythread.h \
+    myobject.h
+=======
     mythread.cpp
 
 HEADERS  += mainwindow.h \
     mythread.h
+>>>>>>> origin/master:thread_demos/thread_demos.pro
 
 FORMS    += mainwindow.ui
