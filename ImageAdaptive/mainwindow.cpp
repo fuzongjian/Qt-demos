@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+//    ui->imageLabel->setScaledContents(true);
 }
 
 MainWindow::~MainWindow()
@@ -25,6 +26,6 @@ void MainWindow::on_pushButton_clicked()
 
 //    ui->imageLabel->resize(pix.height(),pix.width());
     ui->imageLabel->setPixmap(pix);
-
+    ui->imageLabel->setScaledContents(true);
 
 }
