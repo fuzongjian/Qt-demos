@@ -16,6 +16,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QString path = QFileDialog::getOpenFileName(this,tr("上传图片"),"",tr("Images (*.png,*.jpg)"));
+    QString path = QFileDialog::getOpenFileName(this, tr("Open Image"), ".", tr("Image Files(*.jpg *.png)"));
     qDebug()<<path;
+
+
+    QPixmap pix = QPixmap(path);
+    qDebug()<<pix.height()<<pix.width();
+
+//    ui->imageLabel->resize(pix.height(),pix.width());
+    ui->imageLabel->setPixmap(pix);
+
+
 }
