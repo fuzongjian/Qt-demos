@@ -21,3 +21,6 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     image.qrc
+ RC_FILE += icon.rc
+DISTFILES += \
+    icon.rc
