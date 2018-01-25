@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-//    ui->imageLabel->setScaledContents(true);
+
+//    setImageWithPath(":/images/test.png");
 }
 
 MainWindow::~MainWindow()
@@ -18,14 +19,35 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     QString path = QFileDialog::getOpenFileName(this, tr("Open Image"), ".", tr("Image Files(*.jpg *.png)"));
-    qDebug()<<path;
+    if (path == NULL)return;
+    setImageWithPath(path);
 
 
+}
+void MainWindow::setImageWithPath(QString path){
     QPixmap pix = QPixmap(path);
-    qDebug()<<pix.height()<<pix.width();
 
-//    ui->imageLabel->resize(pix.height(),pix.width());
+    float width = pix.width(),height = pix.height();
+    //宽高比一致
+    float scale = width/height;
+    width = ui->imageLabel->width();
+    height = width/scale;
+    if(height > ui->imageLabel->height()){
+        float newScale = ui->imageLabel->height()/height;
+        width*=newScale;
+        height*=newScale;
+    }
+    ui->imageLabel->resize(width,height);
+    pix.scaled(ui->imageLabel->size(),Qt::KeepAspectRatio);
+
     ui->imageLabel->setPixmap(pix);
     ui->imageLabel->setScaledContents(true);
+    // 移动到中心位置
+    QPoint center = ui->bgwidget->rect().center();
+    ui->imageLabel->move(QPoint(center.x()-width*0.5,center.y()-height*0.5));
+}
 
+void MainWindow::resizeEvent(QResizeEvent *event){
+    QWidget::resizeEvent(event);
+    qDebug()<<"hello world";
 }

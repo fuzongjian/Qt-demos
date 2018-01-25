@@ -20,6 +20,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    virtual void resizeEvent(QResizeEvent *event);
+    void  setImageWithPath(QString);
 };
 
 #endif // MAINWINDOW_H
