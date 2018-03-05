@@ -46,10 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     camera->setViewfinder(cameraViewFinder);
     camera->start();//启动摄像头
 
-    /*QVBoxLayout *layout = new QVBoxLayout;
-       layout->addWidget(formWidget);
-       setLayout(layout);
-    */
+
     this->setLayout(mainLayout);/*必须执行这句代码才显现出布局*/
     this->translateLanguage();
 }
