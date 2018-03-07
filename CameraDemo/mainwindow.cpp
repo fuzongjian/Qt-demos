@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QFileDialog>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -23,4 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_saveBtn_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,QString::fromLocal8Bit("保存图片"),QDir::currentPath(),tr("Images (*.png *.xpm *.jpg)"));
+    mCameraImageCapture->capture(fileName);
 }
