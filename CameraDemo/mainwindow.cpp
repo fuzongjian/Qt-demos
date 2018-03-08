@@ -27,6 +27,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_saveBtn_clicked()
 {
+    // 保存图片
     QString fileName = QFileDialog::getSaveFileName(this,QString::fromLocal8Bit("保存图片"),QDir::currentPath(),tr("Images (*.png *.xpm *.jpg)"));
     mCameraImageCapture->capture(fileName);
 }
