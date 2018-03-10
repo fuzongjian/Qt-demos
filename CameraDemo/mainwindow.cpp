@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     // 启动系统摄像头
     mCamera = new QCamera;
-    // 用摄像头初始化一个QCameraImageCapture用来截图
+    //  用摄像头初始化一个QCameraImageCapture用来截图
     mCameraImageCapture = new QCameraImageCapture(mCamera);
     mCameraImageCapture->setCaptureDestination(QCameraImageCapture::CaptureToFile);
     // 设置摄像头的模式，可以抓取静态图像
