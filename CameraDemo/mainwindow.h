@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QCamera>
+
 #include <QCameraImageCapture>
 #include <QCameraViewfinder>
 
