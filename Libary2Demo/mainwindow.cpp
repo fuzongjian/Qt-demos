@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     Library1Demo library;
-    library.hello();
+    ui->label->setText(library.hello());
 }
 
 MainWindow::~MainWindow()

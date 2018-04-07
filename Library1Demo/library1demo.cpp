@@ -4,6 +4,7 @@
 Library1Demo::Library1Demo()
 {
 }
-void Library1Demo::hello(){
+QString Library1Demo::hello(){
     qDebug()<<"hello world";
+    return "hello world";
 }

@@ -8,7 +8,7 @@ class LIBRARY1DEMOSHARED_EXPORT Library1Demo
 
 public:
     Library1Demo();
-    void hello();
+    QString hello();
 };
 
 #endif // LIBRARY1DEMO_H
