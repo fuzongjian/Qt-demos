@@ -8,7 +8,6 @@
 #  define LIBRARY1DEMOSHARED_EXPORT Q_DECL_IMPORT
 #endif
 // 这里是把global的文件也放到这个位置 下 //
-
 class LIBRARY1DEMOSHARED_EXPORT Library1Demo
 {
 
