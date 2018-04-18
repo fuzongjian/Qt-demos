@@ -26,7 +26,7 @@ void MainWindow::on_pushButton_clicked()
 }
 void MainWindow::setImageWithPath(QString path){
     QPixmap pix = QPixmap(path);
-
+    qDebug()<<path;
     float width = pix.width(),height = pix.height();
     //宽高比一致
     float scale = width/height;
