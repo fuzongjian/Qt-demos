@@ -83,3 +83,5 @@ Debug版本是可以输出日志信息的，而Release中输入日志的文件�
 DEFINES += QT_MESSAGELOGCONTEXT
 
 ```
+### 最终结果
+![日志输出](/images/log.png)

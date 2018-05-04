@@ -14,7 +14,8 @@ QString timePoint;
 
 // 日志生成
 void LogOutTxt(QtMsgType type,const QMessageLogContext &context,const QString &msg){
-#ifndef _DEBUG
+#ifdef QT_NO_DEBUG
+#else
     // 保证debug模式正常输出
     cout << msg.toStdString() << endl;
 #endif
@@ -53,6 +54,7 @@ void LogOutTxt(QtMsgType type,const QMessageLogContext &context,const QString &m
     }
     QTextStream out(&file);
     out << "\r\n" << log;
+    // flush() 方法是用来刷新缓冲区的，即将缓冲区中的数据立刻写入文件，同时清空缓冲区，不需要是被动的等待输出缓冲区写入。
     file.flush();
     file.close();
     mutex.unlock();

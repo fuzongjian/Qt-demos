@@ -1,6 +1,6 @@
 # Qt-demos
 
-[1. 日志生成]()
+[1. 日志输出](https://github.com/fuzongjian/Qt-demos/blob/master/mds/log.md)
 
 #### 多线程的使用
 - 创建线程类，继承QThread
