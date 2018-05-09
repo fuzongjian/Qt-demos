@@ -53,7 +53,7 @@ void MainWindow::on_buttonAes_clicked()
 
     ui->textEdit->append(QString("明文：%1").arg(mingwen));
 
-    ui->textEdit->append(QString("密文：%1").arg(miwen));
+    ui->textEdit->append(QString("密文：%1---%2").arg(miwen).arg(strlen(miwen)));
 
     ui->textEdit->append(QString("解密：%1").arg(jiemi));
 

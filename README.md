@@ -2,6 +2,7 @@
 
 [1. 日志输出](https://github.com/fuzongjian/Qt-demos/blob/master/mds/log.md)
 
+[2. 内存相关](https://github.com/fuzongjian/Qt-demos/blob/master/mds/memory.md)
 #### 多线程的使用
 - 创建线程类，继承QThread
 - 重写run方法
