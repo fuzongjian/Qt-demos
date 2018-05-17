@@ -47,12 +47,12 @@ void MainWindow::ffmpegMethod(){
      AVFrame *pFrameRGB = av_frame_alloc();
 
 
-     return;
+
 
      static struct SwsContext * img_convert_ctx = sws_getContext(pCodecCtx->width,pCodecCtx->height,pCodecCtx->pix_fmt,pCodecCtx->width,
                                                                 pCodecCtx->height,AV_PIX_FMT_RGB24,SWS_BICUBIC,NULL,NULL,NULL);
 
-    return;
+     return;
 
 
      int numBytes = avpicture_get_size(AV_PIX_FMT_RGB24,pCodecCtx->width,pCodecCtx->height);
