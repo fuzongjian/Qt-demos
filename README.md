@@ -3,6 +3,8 @@
 [1. 日志输出](https://github.com/fuzongjian/Qt-demos/blob/master/mds/log.md)
 
 [2. 内存相关](https://blog.csdn.net/a844651990/article/details/78814076)
+
+[3. QT与FFmpeg](https://github.com/fuzongjian/Qt-demos/blob/master/mds/HkFFmpeg.md)
 #### 多线程的使用
 - 创建线程类，继承QThread
 - 重写run方法
