@@ -45,19 +45,20 @@ void MainWindow::ffmpegMethod(){
     }
      AVFrame *pFrame = av_frame_alloc();
      AVFrame *pFrameRGB = av_frame_alloc();
+     AVPicture  pAVPicture;
 
+    avpicture_alloc(&pAVPicture,AV_PIX_FMT_RGB24,pCodecCtx->width,pCodecCtx->height);
 
+     static struct SwsContext *img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height,
+                                                                AV_PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height,
+                                                                AV_PIX_FMT_RGB24, SWS_BICUBIC, NULL, NULL, NULL);
 
-
-     static struct SwsContext * img_convert_ctx = sws_getContext(pCodecCtx->width,pCodecCtx->height,pCodecCtx->pix_fmt,pCodecCtx->width,
-                                                                pCodecCtx->height,AV_PIX_FMT_RGB24,SWS_BICUBIC,NULL,NULL,NULL);
-
-     return;
 
 
      int numBytes = avpicture_get_size(AV_PIX_FMT_RGB24,pCodecCtx->width,pCodecCtx->height);
      uint8_t *out_buffer = (uint8_t *)av_malloc(numBytes * sizeof(uint8_t));
      avpicture_fill((AVPicture *)pFrameRGB,out_buffer,AV_PIX_FMT_RGB24,pCodecCtx->width,pCodecCtx->height);
+
      int y_size = pCodecCtx->width * pCodecCtx->height;
      // 分配一个packet
      AVPacket *packet = (AVPacket *)malloc(sizeof(AVPacket));
@@ -76,6 +77,18 @@ void MainWindow::ffmpegMethod(){
                 qDebug()<<"decode error";
                 return;
             }
+            if(got_picture){
+                sws_scale(img_convert_ctx,(uint8_t const * const *)pFrame->data,pFrame->linesize,0,pCodecCtx->height,pFrameRGB->data,pFrameRGB->linesize);
+
+                ffmpegSaveImage(pFrameRGB,pCodecCtx->width,pCodecCtx->height,index++);
+                if(index > 50) return;
+                if(index == 40){
+                    QImage image(pAVPicture.data[0],pCodecCtx->width,pCodecCtx->height,QImage::Format_RGB888);
+
+                    qDebug()<<image.size()<<image.save("fuzongjian.jpg","jpg");
+                    ui->label->setPixmap(QPixmap::fromImage(image));
+                }
+            }
          }
          av_free_packet(packet);
      }
@@ -83,6 +96,26 @@ void MainWindow::ffmpegMethod(){
      av_free(pFrameRGB);
      avcodec_close(pCodecCtx);
      avformat_close_input(&pFormatCtx);
+}
+void MainWindow::ffmpegSaveImage(AVFrame * pframe, int width, int height, int index){
+    FILE * pFile;
+    char szFilename[32];
+    int y;
+    // open file
+    sprintf(szFilename,"frame%d.jpg",index);
+    pFile = fopen(szFilename,"wb");
+    if(pFile == NULL){
+        qDebug()<<"error";
+        return;
+    }
+    // write header
+    fprintf(pFile,"P6 %d %d",width,height);
+    // wirte pixel data
+    for(y = 0; y < height; y ++){
+        fwrite(pframe->data[0]+y*pframe->linesize[0],1,width*3,pFile);
+    }
+    // close file
+    fclose(pFile);
 }
 
 MainWindow::~MainWindow()

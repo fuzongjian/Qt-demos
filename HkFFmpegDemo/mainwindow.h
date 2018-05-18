@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include <stdio.h>
 using namespace std;
 extern "C"
 {
@@ -35,6 +36,7 @@ public:
 private:
     Ui::MainWindow *ui;
     void ffmpegMethod();
+    void ffmpegSaveImage(AVFrame *,int,int,int);
 };
 
 #endif // MAINWINDOW_H
