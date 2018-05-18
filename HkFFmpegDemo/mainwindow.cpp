@@ -116,6 +116,7 @@ void MainWindow::ffmpegSaveImage(AVFrame * pframe, int width, int height, int in
     }
     // close file
     fclose(pFile);
+
 }
 
 MainWindow::~MainWindow()
