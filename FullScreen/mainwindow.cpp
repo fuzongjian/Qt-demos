@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <windows.h>
+//#include <QThread>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -10,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowFlags(Qt::FramelessWindowHint);
 
+//    qDebug()<<QThread::currentThread()<<QThread::currentThreadId();
 
 }
 bool MainWindow::enumuserwindowscb(HWND hwnd,LPARAM lParam){
@@ -35,7 +37,12 @@ void MainWindow::on_pushButton_clicked()
 }
 void MainWindow::on_pushButtonSmall_clicked()
 {
-
+//    SetParent((HWND)this->winId(),NULL);
+//    qDebug()<<this->parent()<<GetParent((HWND)this->winId());
+//   hide();
+//   this->deleteLater();
+//   qDebug()<<this->parent()<<GetParent((HWND)this->winId());
+    QApplication::quit();
 }
 bool MainWindow::event(QEvent *event){
 
