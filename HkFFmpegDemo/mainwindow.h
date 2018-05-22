@@ -35,8 +35,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    void ffmpegMethod();
     void ffmpegSaveImage(AVFrame *,int,int,int);
+    void ffmpegMethod_2();
+    void clipVideo();
 };
 
 #endif // MAINWINDOW_H
