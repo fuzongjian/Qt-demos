@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDebug>
 #include <stdio.h>
+#include <QProcess>
 using namespace std;
 extern "C"
 {
@@ -35,9 +36,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    void ffmpegSaveImage(AVFrame *,int,int,int);
     void ffmpegMethod_2();
     void clipVideo();
+    QProcess p;
+private slots:
+    void process_out();
+    void finish(int);
 };
 
 #endif // MAINWINDOW_H

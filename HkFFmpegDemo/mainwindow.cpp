@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QThread>
-#include <QProcess>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -12,28 +12,31 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit->append(avcodec_configuration());
 
 //    ffmpegMethod();
-    ffmpegMethod_2();
-//    clipVideo();
+//    ffmpegMethod_2();
+    clipVideo();
 
 }
 void MainWindow::clipVideo(){
-// ffmpeg -ss 00:04:30 -t 00:00:30 -i E:/QT/test.mp4 -vcodec copy -acodec copy E:/QT/2.mp4
-    QProcess p(0);
-    QString command = "cmd";
-    QStringList args;
-//    args<<"-ss"<<"00:04:30"<<"-t"<<"00:00:30"<<"-i"<<"E:/QT/test.mp4"<<"-vcodec copy -acodec copy"<<"E:/QT/2.mp";
-//    args.append("-ss 00:04:30 -t 00:00:30 -i E:/QT/test.mp4 -vcodec copy -acodec copy E:/QT/2.mp4");
-//    args<<"-ss 00:04:30 -t 00:00:30 -i E:/QT/test.mp4 -vcodec copy -acodec copy E:/QT/2.mp4";
-    args<<"\c"<<"cd C:\\Users\\fuzongjian\\Desktop\\HK\\ffmpeg\\static\\bin"<<"&"<<"ffmpeg -ss 00:04:30 -t 00:00:30 -i E:/QT/test.mp4 -vcodec copy -acodec copy E:/QT/2.mp4";
-    qDebug()<<args;
-    p.start(command,args);
-//    p.execute(command,args);
-//    p.waitForStarted();
-    p.waitForFinished();
-   qDebug()<<p.readAll()<<p.readAllStandardError();
-
-
-
+    // ffmpeg -ss 00:04:30 -t 00:00:30 -i E:/QT/test.mp4 -vcodec copy -acodec copy E:/QT/2.mp4
+    connect(&p,SIGNAL(readyReadStandardOutput()),this,SLOT(process_out()));
+    connect(&p,SIGNAL(finished(int)),this,SLOT(finish(int)));
+    // 需要配置环境变量
+    QString cmd = QString("ffmpeg -ss 00:04:30 -t 00:00:30 -i E:/QT/%1 -vcodec copy -acodec copy E:/QT/%2").arg("test-2.mp4").arg("0.mp4");
+    p.start("cmd.exe",QStringList()<<"/c"<<cmd);
+    qDebug()<<"write---"<<p.waitForBytesWritten();
+    qDebug()<<"wait---"<<p.waitForStarted();
+    // 解决 QProcess: destroyed while process still running问题
+    if(p.waitForFinished() == false){
+        p.kill();
+        p.waitForFinished();
+    }
+}
+void MainWindow::process_out(){
+    ui->textEdit->append("\n");
+    ui->textEdit->append(p.readAllStandardOutput());
+}
+void MainWindow::finish(int state){
+    qDebug()<<"hello === "<<state;
 }
 
 void MainWindow::ffmpegMethod_2(){
@@ -52,7 +55,8 @@ void MainWindow::ffmpegMethod_2(){
 
     int videoStream, i, numBytes;
     int ret, got_picture;
-    av_register_all(); //初始化FFMPEG  调用了这个才能正常适用编码器和解码器
+    //初始化FFMPEG  调用了这个才能正常适用编码器和解码器
+    av_register_all();
 
     //Allocate an AVFormatContext.
     pFormatCtx = avformat_alloc_context();
@@ -80,7 +84,7 @@ void MainWindow::ffmpegMethod_2(){
         }
     }
 
-    ///如果videoStream为-1 说明没有找到视频流
+    // 如果videoStream为-1 说明没有找到视频流
     if (videoStream == -1) {
         printf("Didn't find a video stream.\n");
         return;
@@ -158,8 +162,6 @@ void MainWindow::ffmpegMethod_2(){
             }
         }
         av_free_packet(packet);
-
-        //msleep(5); //停一停  不然放的太快了
     }
     av_free(out_buffer);
     av_free(pFrameRGB);
@@ -167,28 +169,6 @@ void MainWindow::ffmpegMethod_2(){
     avformat_close_input(&pFormatCtx);
 }
 
-
-void MainWindow::ffmpegSaveImage(AVFrame * pframe, int width, int height, int index){
-    FILE * pFile;
-    char szFilename[32];
-    int y;
-    // open file
-    sprintf(szFilename,"frame%d.jpg",index);
-    pFile = fopen(szFilename,"wb");
-    if(pFile == NULL){
-        qDebug()<<"error";
-        return;
-    }
-    // write header
-    fprintf(pFile,"P6 %d %d",width,height);
-    // wirte pixel data
-    for(y = 0; y < height; y ++){
-        fwrite(pframe->data[0]+y*pframe->linesize[0],1,width*3,pFile);
-    }
-    // close file
-    fclose(pFile);
-
-}
 
 MainWindow::~MainWindow()
 {
