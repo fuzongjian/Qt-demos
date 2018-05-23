@@ -52,7 +52,7 @@ extern "C"
 
 ![](/images/FFmpeg-4.jpg)
 ### 视频裁剪（代码）
->主要通过QProcess挑起cmd进行截取,`需要配置环境变量`
+>主要通过QProcess调起cmd进行截取,`需要配置环境变量`
 ```
 void MainWindow::clipVideo(){
     // ffmpeg -ss 00:04:30 -t 00:00:30 -i E:/QT/test.mp4 -vcodec copy -acodec copy E:/QT/2.mp4
