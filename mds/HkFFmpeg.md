@@ -1,4 +1,4 @@
-# QT-FFmpeg
+# QT与FFmpeg相关
 ### 配置相关
 - [下载](https://ffmpeg.zeranoe.com/builds/)
 ![下载](/images/FFmpeg.png)
@@ -209,5 +209,3 @@ void MainWindow::ffmpegMethod_2(){
     avformat_close_input(&pFormatCtx);
 }
 ```
-
-**[↑回到顶部](#QT-FFmpeg)**
