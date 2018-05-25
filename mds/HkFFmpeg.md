@@ -1,4 +1,4 @@
-## QT与FFmpeg相关
+# QT-FFmpeg
 ### 配置相关
 - [下载](https://ffmpeg.zeranoe.com/builds/)
 ![下载](/images/FFmpeg.png)
@@ -210,4 +210,4 @@ void MainWindow::ffmpegMethod_2(){
 }
 ```
 
-**[↑回到顶部](##QT与FFmpeg相关)**
+**[↑回到顶部](#QT-FFmpeg)**
