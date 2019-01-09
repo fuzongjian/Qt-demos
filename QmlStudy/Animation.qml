@@ -1,25 +1,27 @@
 import QtQuick 2.0
-Rectangle{
-    id: rect
-    width: 120
-    height: 200
-    Image {
-        id: img
-        source: "qt.png"
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: 0
 
-        SequentialAnimation on y{
+Image{
+    source: "background.png"
+    Image{
+        x: 40; y: 40
+        source: "rocket.png"
+        NumberAnimation on x{
+            to: 240
+            duration: 4000
             loops: Animation.Infinite
-            NumberAnimation { to: rect.height - img.height;
-                              easing.type: Easing.OutBounce;
-                              duration: 2000
-            }
-
-            PauseAnimation {
-                duration: 1000
-            }
-            NumberAnimation{ to: 0; easing.type: Easing.OutQuad; duration: 1000 }
+        }
+        RotationAnimation on rotation{
+            to: 360
+            duration: 4000
+            loops: Animation.Infinite
         }
     }
+
 }
+/*
+  PropertyAnimation属性动画（使用属性值改变播放的动画）
+  NumberAnimation数字动画（使用数字改变播放的动画）
+  ColorAnimation颜色动画（使用颜色改变播放的动画）
+  RotationAnimation旋转动画（使用旋转改变播放的动画）
+
+*/

@@ -40,11 +40,14 @@ Rectangle{
     PathView{
         id: view
         anchors.fill: parent
+        // preferredHighlightBegin、preferredHighlightEnd指定当前item在view中首选起始结束的位置
         preferredHighlightBegin: 0.5
         preferredHighlightEnd: 0.5
         focus: true
         model: appModel
         delegate: appDelegate
+        // highlight 指定当前item绘制高亮效果组件
+        highlight: appHighlight
         path: Path{
             startX: 10
             startY: 50
