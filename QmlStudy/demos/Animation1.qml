@@ -26,7 +26,7 @@ Item {
     Image {
         id: ball
         x: 20; y: 240
-        source: "soccer_ball.png"
+        source: "../images/soccer_ball.png"
         MouseArea{
             anchors.fill: parent
             onClicked: {

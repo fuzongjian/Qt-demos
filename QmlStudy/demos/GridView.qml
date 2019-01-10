@@ -6,13 +6,13 @@ Rectangle{
     color: "white"
     ListModel{
         id: appModel
-        ListElement { name: "Music"; icon: "AudioPlayer_48.png" }
-        ListElement { name: "Movies"; icon: "VideoPlayer_48.png" }
-        ListElement { name: "Camera"; icon: "Camera_48.png" }
-        ListElement { name: "Calendar"; icon: "DateBook_48.png" }
-        ListElement { name: "Messaging"; icon: "EMail_48.png" }
-        ListElement { name: "Todo List"; icon: "TodoList_48.png" }
-        ListElement { name: "Contacts"; icon: "AddressBook_48.png" }
+        ListElement { name: "Music"; icon: "../images/AudioPlayer_48.png" }
+        ListElement { name: "Movies"; icon: "../images/VideoPlayer_48.png" }
+        ListElement { name: "Camera"; icon: "../images/Camera_48.png" }
+        ListElement { name: "Calendar"; icon: "../images/DateBook_48.png" }
+        ListElement { name: "Messaging"; icon: "../images/EMail_48.png" }
+        ListElement { name: "Todo List"; icon: "../images/TodoList_48.png" }
+        ListElement { name: "Contacts"; icon: "../images/AddressBook_48.png" }
     }
     Component{
         id: appDelegate

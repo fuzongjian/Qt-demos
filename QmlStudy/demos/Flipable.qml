@@ -6,8 +6,10 @@ Flipable{
     height: 240
     property bool flipped: false
 
-    front: Image{ source: "front.png"; anchors.centerIn: parent }
-    back: Image{ source: "back.png"; anchors.centerIn: parent }
+    front: Image{ source: "../images/front.png"; anchors.centerIn: parent }
+    back: Image{ source: "../images/back.png"; anchors.centerIn: parent
+
+    }
 
     transform: Rotation{
         id: rotation

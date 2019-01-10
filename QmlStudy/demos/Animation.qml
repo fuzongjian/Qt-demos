@@ -1,10 +1,10 @@
 import QtQuick 2.0
 
 Image{
-    source: "background.png"
+    source: "../images/background.png"
     Image{
         x: 40; y: 40
-        source: "rocket.png"
+        source: "../images/rocket.png"
         NumberAnimation on x{
             to: 240
             duration: 4000

@@ -29,7 +29,6 @@ Rectangle {
             height: 260
             visible: PathView.onPath
             z: PathView.zOrder
-
             Image{
                 id:myImage
                 width: 340
@@ -103,15 +102,15 @@ Rectangle {
 
     ListModel{
         id: myModel
-        ListElement { picName: "01.png" }
-        ListElement { picName: "02.png" }
-        ListElement { picName: "03.png" }
-        ListElement { picName: "04.png" }
-        ListElement { picName: "05.png" }
-        ListElement { picName: "06.png" }
-        ListElement { picName: "07.png" }
-        ListElement { picName: "08.png" }
-        ListElement { picName: "09.png" }
-        ListElement { picName: "10.png" }
+        ListElement { picName: "../images/01.png" }
+        ListElement { picName: "../images/02.png" }
+        ListElement { picName: "../images/03.png" }
+        ListElement { picName: "../images/04.png" }
+        ListElement { picName: "../images/05.png" }
+        ListElement { picName: "../images/06.png" }
+        ListElement { picName: "../images/07.png" }
+        ListElement { picName: "../images/08.png" }
+        ListElement { picName: "../images/09.png" }
+        ListElement { picName: "../images/10.png" }
     }
 }
