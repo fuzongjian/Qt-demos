@@ -49,13 +49,19 @@ Rectangle{
         // highlight 指定当前item绘制高亮效果组件
         highlight: appHighlight
         path: Path{
+
             startX: 10
             startY: 50
             PathAttribute { name: "iconScale"; value: 0.5 }
+            // 定义一个二次贝塞尔曲线的轨迹
             PathQuad { x: 200; y: 150; controlX: 50; controlY: 200 }
             PathAttribute { name: "iconScale"; value: 1.0 }
             PathQuad { x: 390; y: 50; controlX: 350; controlY: 200 }
             PathAttribute { name: "iconScale"; value: 0.5 }
+
+
+
+
         }
     }
 }
