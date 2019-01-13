@@ -7,11 +7,12 @@ Canvas {
     Path {
         id: myPath
         /*1*/
-//        startX: 100; startY: 0
+//        startX: 0; startY: 100
 //        PathArc {
-//            x: 0; y: 100
+//            x: 100; y: 100
 //            radiusX: 100; radiusY: 100
-//            useLargeArc: true
+////            useLargeArc: true
+//            direction: PathArc.Clockwise
 //        }
         /*2*/
            startX: 0; startY: 100
