@@ -17,7 +17,12 @@ Window {
         }
 
     }
-
+    Connections{
+        target: manager
+        onMySignal:{
+            console.log("signal----")
+        }
+    }
     MouseArea {
         anchors.fill: parent
         onClicked: {
