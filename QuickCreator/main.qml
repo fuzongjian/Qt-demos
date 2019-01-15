@@ -15,6 +15,7 @@ Window {
             var string = testString()
             console.log(string)
         }
+
     }
 
     MouseArea {
