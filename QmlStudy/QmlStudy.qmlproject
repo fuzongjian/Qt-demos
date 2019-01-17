@@ -17,10 +17,13 @@ Project {
     }
     // 加载json文件
     Files{
+        filter: "*.ogg"
+        directory:  "."
+    }
+    Files{
         filter: "*.JSON"
         directory:  "."
     }
-
     /* List of plugin directories passed to QML runtime */
     // importPaths: [ "../exampleplugin" ]
 }
