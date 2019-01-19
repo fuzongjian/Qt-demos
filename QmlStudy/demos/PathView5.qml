@@ -13,12 +13,22 @@ Rectangle{
         color: "blue"
         anchors.centerIn: parent
     }
+    Timer{
+        id: timer
+        interval: 2000
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            console.log(view.currentIndex)
+            view.currentIndex += 1
+        }
+    }
 
     PathView{
         id: view
         anchors.fill: parent
         model: itemCount
-        pathItemCount: 20
+        pathItemCount: 50
 //        highlight: highLight
         delegate: Rectangle{
             id: item
@@ -58,25 +68,16 @@ Rectangle{
             PathLine {x: view.width-250; y: view.height-250 }
             PathLine {x: 250; y: view.height-250 }
             PathLine {x: 250; y: 250 }
+        }
+        onMovementStarted: {
+            timer.stop()
+        }
+        onMovementEnded: {
+            timer.start()
+        }
 
-
-//            PathLine {x: 120; y: 120 }
-//            PathLine { x: view.width-120; y: 120 }
-//            PathLine {x: view.width-120; y: view.height-120 }
-//            PathLine {x: 120; y: view.height-120 }
-//            PathLine {x: 120; y: 120 }
-
-//            PathLine {x: 170; y: 170 }
-//            PathLine { x: view.width-170; y: 170 }
-//            PathLine {x: view.width-170; y: view.height-170 }
-//            PathLine {x: 170; y: view.height-170 }
-//            PathLine {x: 170; y: 170 }
-
-//            PathLine {x: 220; y: 220 }
-//            PathLine { x: view.width-220; y: 220 }
-//            PathLine {x: view.width-220; y: view.height-220 }
-//            PathLine {x: 220; y: view.height-220 }
-//            PathLine {x: 220; y: 220 }
+        Component.onCompleted: {
+            timer.start()
         }
     }
     Component{
