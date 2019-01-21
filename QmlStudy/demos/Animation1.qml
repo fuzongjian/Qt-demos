@@ -30,7 +30,7 @@ Item {
         MouseArea{
             anchors.fill: parent
             onClicked: {
-                ball.x = 20; ball.y = 240
+//                ball.x = 20; ball.y = 240
                 anim.restart()
             }
         }
@@ -52,18 +52,18 @@ Item {
             easing.type: Easing.OutBounce
         }
     }
-    NumberAnimation{
-        target: ball
-        properties: "x"
-        to: 400
-        duration: root.duration
-    }
-    RotationAnimation{
-        target: ball
-        properties: "rotation"
-        to: 720
-        duration: root.duration * 1.1
-    }
+//    NumberAnimation{
+//        target: ball
+//        properties: "x"
+//        to: 400
+//        duration: root.duration
+//    }
+//    RotationAnimation{
+//        target: ball
+//        properties: "rotation"
+//        to: 720
+//        duration: root.duration * 1.1
+//    }
 }
 
 
