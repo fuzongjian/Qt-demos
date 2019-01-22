@@ -4,7 +4,11 @@ Rectangle{
     id: root
     width: 550
     height: 400
-    color: "white"
+    color: "black"
+    Keys.onPressed: {
+        console.log(event.key)
+    }
+
     Component{
         id: appDelegate
         Item{
@@ -14,14 +18,24 @@ Rectangle{
                 width: parent.width -5
                 height: parent.height -5
                 anchors.centerIn: parent
-                color: "blue"
+                color: "black"
                 border.width: 1
                 radius: 5
-                Text{
-                  anchors.centerIn: parent
-                    text: index + 1
-                    color: "white"
+                Image {
+                    id: displayImage
+                    source: "../images/10.png"
+                    anchors.fill: parent
+                    clip: true
+                    fillMode: Image.PreserveAspectCrop
+                    smooth: true
+                    asynchronous: true
+                    cache: false //指定是否缓存图像，默认为true，在处理大图像的时候，指定为false还是很有用的
                 }
+//                Text{
+//                  anchors.centerIn: parent
+//                    text: index + 1
+//                    color: "white"
+//                }
                 RotationAnimation on  rotation{
                     from: 0; to: 360
                     duration: 1000
