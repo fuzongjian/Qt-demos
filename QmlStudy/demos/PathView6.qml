@@ -19,7 +19,7 @@ Rectangle{
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            view.currentIndex += 1
+            view.currentIndex -= 2
         }
     }
 
@@ -72,11 +72,11 @@ Rectangle{
             timer.stop()
         }
         onMovementEnded: {
-//            timer.start()
+            timer.start()
         }
 
         Component.onCompleted: {
-//            timer.start()
+            timer.start()
         }
     }
     Component{
