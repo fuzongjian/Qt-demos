@@ -4,7 +4,7 @@ Rectangle{
     id: root
     width: 550
     height: 400
-    color: "black"
+    color: "white"
     Keys.onPressed: {
         console.log(event.key)
     }
@@ -31,6 +31,7 @@ Rectangle{
                     asynchronous: true
                     cache: false //指定是否缓存图像，默认为true，在处理大图像的时候，指定为false还是很有用的
                 }
+
 //                Text{
 //                  anchors.centerIn: parent
 //                    text: index + 1
@@ -49,6 +50,7 @@ Rectangle{
 
                 MouseArea{
                     anchors.fill: parent
+                    hoverEnabled: true // 鼠标悬停事件
                     onClicked: {
                         console.log(index)
                         gridview.clickNum = index + 1
@@ -57,6 +59,12 @@ Rectangle{
                         else
                             gridview.state = "show"
                        // gridview.state = (gridview.state == "hidden" ? "show" : "hidden")
+                    }
+                    onEntered: {
+                        console.log("onEntered")
+                    }
+                    onExited: {
+                        console.log("onExited")
                     }
                 }
             }
