@@ -1,8 +1,8 @@
 import QtQuick 2.0
-
+import "WaterFall.js" as WaterFall
 Item {
-    width: 1500
-    height: 1500
+    width: 800
+    height: 600
     Item {
         id: flow
         anchors.fill: parent
@@ -15,7 +15,11 @@ Item {
         property var cards: [] // 保存所有的卡片
         property var selects: [] // 被选中的卡片
         property int type: 1 // 1 创建  2 销毁
-        property var path: "file:///C:/Users/fuzongjian/Desktop/Qt-Quick/testimage/image("
+        property int radius: 300 // 定义半径
+        property var selectedX: 0
+        property var selectedY: 0
+        property var selectedaAngle: 0
+        property int selectNum: 10000  // 标记选中的卡片
         function push(item){
             var x = originX + margin;
 
@@ -28,7 +32,7 @@ Item {
                     // 销毁最后一个（多余）
                     item.opacity = 0;
                     /********************************* 开启销毁；需要延时 *****************************/
-                    //startDestroy();
+//                    startDestroy();
                 }
                 // 更新originY
                 originY += (cardHeight + margin);
@@ -37,6 +41,7 @@ Item {
             item.y = originY;
             // 保存
             cards.push(item);
+
             // 更新originX
             originX = x + cardWidth;
 
@@ -50,8 +55,8 @@ Item {
                 builder.start();
             })
         }
-
         function remove(idx){
+            // 如果数组中没有卡片了，就启动添加
             if(cards.length == 0){
                 builder.stop();
                 destroyer.delay(3,function start(){
@@ -63,6 +68,7 @@ Item {
                 })
                 return;
             }
+            // 重组剩下的卡片
             var item = cards[idx]
             cards = cards.slice(0,idx).concat(cards.slice(idx+1));
             item.z = 1000;
@@ -70,71 +76,55 @@ Item {
             item.opacity = 0;
         }
         function resetLayout(){
+            // 筛选出需要变化的卡片
             for(var i = 0; i < cards.length; i ++){
                 var item = cards[i]
-                dealDistance(item,function getState(state,idx){
+                dealDistance(item,function getState(state){
                     if(state === true){
                         item.x = flow.width*0.5
                         item.y = flow.height*0.5
                         item.scale = 0
                         flow.selects.push(item)
                     }
-//                    switch (idx){
-//                    case 1:
-//                        item.x += item.scale * item.width
-//                        item.y -= item.scale * item.height
-//                        item.z =  1000
-//                        break
-//                    case 2:
-//                        item.x -= item.scale * item.width
-//                        item.y -= item.scale * item.height
-//                        item.z =  1000
-//                        break
-//                    case 3:
-//                        item.x -= item.scale * item.width
-//                        item.y += item.scale * item.height
-//                        item.z =  1000
-//                        break
-//                    case 4:
-//                        item.x += item.scale * item.width
-//                        item.y += item.scale * item.height
-//                        item.z =  1000
-//                        break
-//                    default:
-//                        break
-//                    }
                 })
             }
-            console.log(flow.selects.length)
+            // 对选中的卡片做处理
+            /*
+             * 1、根据半径、角度来计算坐标
+             * 2、更换需要变化的卡片
+            */
+            var length = flow.selects.length,angle = (360/length).toFixed(3),allAngle = 0
+            var halfWidth = flow.width*0.5,halfHeight = flow.height*0.5
+            for(var j = 0; j < length; j ++){
+                allAngle = (angle*j).toFixed(1) * Math.PI / 180
+                var x = halfWidth + (radius-20) * Math.sin(allAngle)
+                var y = halfHeight - (radius-20) * Math.cos(allAngle)
+                var itm = selects[j]
+                itm.z = 1000+j
+                itm.x = x- cardWidth*0.5
+                itm.y = y - cardHeight*0.5
+                itm.scale = 0.8
+                itm.rotation = (angle*i).toFixed(1)
+            }
+
         }
+        // parentW、parentH、childW、childH、item
         function dealDistance(rect,callback){
             var x = flow.width * 0.5 - rect.x - flow.cardWidth*0.5
-            var y = flow.height * 0.5 - rect.y - flow.cardWidth*0.5
-            // 判断中心距离
+            var y = flow.height * 0.5 - rect.y - flow.cardHeight*0.5
+            // 判断中心距离（勾股定理）
             var width = Math.abs(x)
             var height = Math.abs(y)
             var distance = Math.sqrt(width*width + height*height)
             var stat = false
-            if(distance < 300){
+            if(distance < radius){
                 stat = true
-            }else{
-                stat = false
             }
-            // 判断象限
-            var quadrant = 0
-            if(stat == true){
-                if(x < 0 && y > 0){
-                    quadrant = 1
-                }else if(x < 0 && y < 0){
-                    quadrant = 4
-                }else if(x > 0 && y > 0){
-                    quadrant = 2
-                }else{
-                     quadrant = 3
-                }
-                callback(stat,quadrant)
-            }
-
+            callback(stat)
+        }
+       // 监听宽度变化，如果变化则需要进行重新布局
+        onWidthChanged: {
+            console.log(width)
         }
         Component{
             id: card
@@ -151,6 +141,7 @@ Item {
                 Behavior on y { NumberAnimation { duration: flow.duration }}  // y 动画
                 Behavior on opacity { NumberAnimation { duration: flow.duration }}
                 Behavior on scale { NumberAnimation { duration: flow.duration }}
+                Behavior on rotation { NumberAnimation { duration: flow.duration }}
                 // 先设置当opacity为0时，销毁
                 onOpacityChanged: {
                     if(opacity == 0){
@@ -159,27 +150,71 @@ Item {
                 }
                 // 加载完成时，设置opacity为1
                 Component.onCompleted: { opacity = 1 }
+
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        // 在这里处理位置
-                        flow.resetLayout();
-
+                        // 排除重复点击
+                        if(flow.cards.indexOf(item) === flow.selectNum)return
+                        // 在这里处理位置(如果布局已经重置，则不再执行)
+                        if(flow.selectNum === 10000){
+                            flow.resetLayout()
+                            // 如果选中的是重置的卡片做延时处理
+                            if(flow.selects.indexOf(item) !== -1){
+                                destroyer.delay(1,function after(){
+                                    // 记录卡片在数组中的位置、卡片的坐标
+                                    flow.selectedX = item.x
+                                    flow.selectedY = item.y
+                                    flow.selectNum = flow.cards.indexOf(item)
+                                    if(flow.selects.indexOf(item) != -1){
+                                        flow.selectedaAngle = item.rotation
+                                    }
+                                    // 更改选中的卡片位置大小
+                                    item.x = flow.width*0.5-item.width*0.5
+                                    item.y = flow.height*0.5-item.height*0.5
+                                    item.scale = 1.5
+                                    item.rotation = 0
+                                })
+                                return;
+                            }
+                        }else{
+                            // 还原
+                            var itm = flow.cards[flow.selectNum]
+                            itm.x = flow.selectedX
+                            itm.y = flow.selectedY
+                            itm.scale = 1.0
+                            if(flow.selects.indexOf(itm) != -1){
+                                itm.rotation = flow.selectedaAngle
+                                itm.scale = 0.8
+                            }
+                        }
+                        // 记录卡片在数组中的位置、卡片的坐标
+                        flow.selectedX = item.x
+                        flow.selectedY = item.y
+                        flow.selectNum = flow.cards.indexOf(item)
+                        if(flow.selects.indexOf(item) != -1){
+                            flow.selectedaAngle = item.rotation
+                        }
+                        // 更改选中的卡片位置大小
+                        item.x = flow.width*0.5-item.width*0.5
+                        item.y = flow.height*0.5-item.height*0.5
+                        item.scale = 1.5
+                        item.rotation = 0
                     }
                 }
-//                Image {
-//                    id: displayImage
-//                    anchors.fill: parent
-//                    source: "../images/0" + parseInt(Math.random()*10)+".png"
-//                }
+                Image {
+                    id: displayImage
+                    anchors.fill: parent
+                    source: "../images/0" + WaterFall.random(10) +".png"
+                }
             }
         }
     }
-    // 定时器
+    // 定时器（创建卡片、销毁卡片）
     Timer{
         id: builder
         repeat: true
-        interval: 10
+        interval: 5
         running: true
         triggeredOnStart: true
         onTriggered: {
@@ -193,11 +228,9 @@ Item {
             default:
                 break;
             }
-
-
         }
     }
-    // 延时处理
+    // 延时、停止、
     Item {
         id: destroyer
         Timer{
@@ -207,7 +240,10 @@ Item {
             timer.interval = delayTime*1000;
             timer.repeat = false;
             timer.triggered.connect(callback);
-            timer.start();
+            timer.restart()
+        }
+        function stop(){
+            timer.stop()
         }
     }
 }
