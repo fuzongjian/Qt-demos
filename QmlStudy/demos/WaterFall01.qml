@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import "WaterFall.js" as WaterFall
 Item {
-    width: 800
-    height: 600
+    width: 1200
+    height: 900
     Item {
         id: flow
         anchors.fill: parent
@@ -18,8 +18,11 @@ Item {
         property int radius: 300 // 定义半径
         property var selectedX: 0
         property var selectedY: 0
+        property var selectedW: 0
+        property var selectedH: 0
         property var selectedaAngle: 0
         property int selectNum: 10000  // 标记选中的卡片
+        property var isReset: false
         function push(item){
             var x = originX + margin;
 
@@ -31,8 +34,8 @@ Item {
                     builder.stop();
                     // 销毁最后一个（多余）
                     item.opacity = 0;
-                    /********************************* 开启销毁；需要延时 *****************************/
-//                    startDestroy();
+                    /********************************* 开启销毁 *****************************/
+                    startDestroy();
                 }
                 // 更新originY
                 originY += (cardHeight + margin);
@@ -49,11 +52,25 @@ Item {
 
         }
         function startDestroy(){
-            destroyer.delay(3,function start(){
-                flow.type = 2;
-                builder.interval = 100;
-                builder.start();
+            disappear.willStart(1,function start(){
+                var randomN = WaterFall.randomX(cards.length,selectNum)
+                var itm = cards[randomN]
+                if(flow.selects.indexOf(itm) > 0) return;
+                var newitm = card.createObject(flow);
+                newitm.x = itm.x
+                newitm.y = itm.y
+                newitm.width = itm.width
+                newitm.height = itm.height
+                newitm.rotation = itm.rotation
+                newitm.scale = itm.scale
+                newitm.z = itm.z
+                cards[randomN] = newitm
+                itm.opacity = 0
+
+
+//                resetCircle()
             })
+
         }
         function remove(idx){
             // 如果数组中没有卡片了，就启动添加
@@ -106,7 +123,59 @@ Item {
                 itm.scale = 0.8
                 itm.rotation = (angle*i).toFixed(1)
             }
+            destroyer.delay(5,function after(){
+                console.log("time end")
+                resetCircle()
+            })
+        }
+        function resetCircle(){
+            if(flow.selects.length === 0)return;
 
+//            var a = WaterFall.random(flow.selects.length)
+//            var b = WaterFall.random(flow.selects.length)
+//            if(a === b) return;
+
+//            var itemA = selects[a]
+//            var itemB = selects[b]
+
+//            var x = itemA.x,y = itemA.y,rotation = itemA.rotation
+
+
+
+//            itemA.x = itemB.x
+//            itemA.y = itemB.y
+//            itemA.rotation = itemB.rotation
+
+//            itemB.x = x
+//            itemB.y = y
+//            itemB.rotation = rotation
+//            var length = flow.selects.length
+//            for(var i = 0; i < length; i ++){
+//                var j = i + 1
+//                if(i === length - 1){
+//                    j = 0
+//                }
+//            }
+
+//            return;
+            var length = flow.selects.length,angle = (360/length).toFixed(1)
+            var halfWidth = flow.width*0.5,halfHeight = flow.height*0.5
+            for(var k = 0; k < length; k ++){
+                var itm = selects[k]
+                var rotation = itm.rotation
+//                angle =  parseFloat(angle)
+//                console.log(typeof angle,typeof rotation)
+//                rotation += angle
+//                console.log(rotation)
+//                itm.rotation = itm.rotation + angle
+
+//                var x = halfWidth + (radius-20) * Math.sin(itm.rotation)
+//                var y = halfHeight - (radius-20) * Math.cos(itm.rotation)
+//                itm.z = 1000+k
+//                itm.x = x - cardWidth*0.5
+//                itm.y = y - cardHeight*0.5
+//                itm.scale = 0.8
+            }
         }
         // parentW、parentH、childW、childH、item
         function dealDistance(rect,callback){
@@ -122,9 +191,11 @@ Item {
             }
             callback(stat)
         }
+
+
        // 监听宽度变化，如果变化则需要进行重新布局
         onWidthChanged: {
-            console.log(width)
+//            console.log(width)
         }
         Component{
             id: card
@@ -141,7 +212,9 @@ Item {
                 Behavior on y { NumberAnimation { duration: flow.duration }}  // y 动画
                 Behavior on opacity { NumberAnimation { duration: flow.duration }}
                 Behavior on scale { NumberAnimation { duration: flow.duration }}
-                Behavior on rotation { NumberAnimation { duration: flow.duration }}
+//                Behavior on rotation { NumberAnimation { duration: flow.duration }}
+//                Behavior on width { NumberAnimation { duration: flow.duration }}
+//                Behavior on height { NumberAnimation { duration: flow.duration }}
                 // 先设置当opacity为0时，销毁
                 onOpacityChanged: {
                     if(opacity == 0){
@@ -161,15 +234,23 @@ Item {
                             flow.resetLayout()
                             // 如果选中的是重置的卡片做延时处理
                             if(flow.selects.indexOf(item) !== -1){
+                                // 标记第一次正在重置卡片状态
+                                flow.isReset = true
+
                                 destroyer.delay(1,function after(){
                                     // 记录卡片在数组中的位置、卡片的坐标
                                     flow.selectedX = item.x
                                     flow.selectedY = item.y
+                                    flow.selectedW = item.width
+                                    flow.selectedH = item.height
                                     flow.selectNum = flow.cards.indexOf(item)
                                     if(flow.selects.indexOf(item) != -1){
                                         flow.selectedaAngle = item.rotation
                                     }
                                     // 更改选中的卡片位置大小
+                                    item.width = flow.radius*0.6
+                                    item.height = flow.radius*0.8
+
                                     item.x = flow.width*0.5-item.width*0.5
                                     item.y = flow.height*0.5-item.height*0.5
                                     item.scale = 1.5
@@ -182,6 +263,8 @@ Item {
                             var itm = flow.cards[flow.selectNum]
                             itm.x = flow.selectedX
                             itm.y = flow.selectedY
+                            itm.width = flow.selectedW
+                            itm.height = flow.selectedH
                             itm.scale = 1.0
                             if(flow.selects.indexOf(itm) != -1){
                                 itm.rotation = flow.selectedaAngle
@@ -191,22 +274,26 @@ Item {
                         // 记录卡片在数组中的位置、卡片的坐标
                         flow.selectedX = item.x
                         flow.selectedY = item.y
+                        flow.selectedW = item.width
+                        flow.selectedH = item.height
                         flow.selectNum = flow.cards.indexOf(item)
                         if(flow.selects.indexOf(item) != -1){
                             flow.selectedaAngle = item.rotation
                         }
                         // 更改选中的卡片位置大小
+                        item.width = flow.radius*0.6
+                        item.height = flow.radius*0.8
                         item.x = flow.width*0.5-item.width*0.5
                         item.y = flow.height*0.5-item.height*0.5
                         item.scale = 1.5
                         item.rotation = 0
                     }
                 }
-                Image {
-                    id: displayImage
-                    anchors.fill: parent
-                    source: "../images/0" + WaterFall.random(10) +".png"
-                }
+//                Image {
+//                    id: displayImage
+//                    anchors.fill: parent
+//                    source: "../images/0" + WaterFall.random(10) +".png"
+//                }
             }
         }
     }
@@ -244,6 +331,21 @@ Item {
         }
         function stop(){
             timer.stop()
+        }
+    }
+    // 定时随机销毁
+    Item {
+        id: disappear
+        Timer{
+            id: disappear_timer
+            repeat: true
+            running: false
+            triggeredOnStart: false
+        }
+        function willStart(time,callback){
+            disappear_timer.interval  = time * 1000
+            disappear_timer.triggered.connect(callback)
+            disappear_timer.start()
         }
     }
 }

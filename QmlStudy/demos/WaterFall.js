@@ -10,6 +10,17 @@ function random(num){
     }
     return idx
 }
+function randomX(num,other){
+    var idx = parseInt(Math.random()*num)
+    if(other === 10000){
+        return idx
+    }else if(idx === other){
+       return randomX(num,other)
+    }
+    return idx
+
+}
+
 // 勾股定理计算
 //parentW、parentH、childW、childH、item
 //function
