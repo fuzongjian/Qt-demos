@@ -2,7 +2,7 @@ import QtQuick 2.0
 import "WaterFall.js" as WaterFall
 Item {
     width: 1200
-    height: 900
+    height: 1000
     Item {
         id: flow
         anchors.fill: parent
@@ -121,7 +121,7 @@ Item {
                 itm.x = x- cardWidth*0.5
                 itm.y = y - cardHeight*0.5
                 itm.scale = 0.8
-                itm.rotation = (angle*i).toFixed(1)
+                itm.rotation = (angle*j).toFixed(1)
             }
             destroyer.delay(5,function after(){
                 console.log("time end")
@@ -289,11 +289,11 @@ Item {
                         item.rotation = 0
                     }
                 }
-//                Image {
-//                    id: displayImage
-//                    anchors.fill: parent
-//                    source: "../images/0" + WaterFall.random(10) +".png"
-//                }
+                Image {
+                    id: displayImage
+                    anchors.fill: parent
+                    source: "../images/0" + WaterFall.random(10) +".png"
+                }
             }
         }
     }
