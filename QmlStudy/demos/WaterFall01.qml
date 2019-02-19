@@ -23,10 +23,12 @@ Item {
         property var selectedaAngle: 0
         property int selectNum: 10000  // 标记选中的卡片
         property var isReset: false
+        property int rowN: 0 // 记录行
+        property int columnN: 0 // 记录每行的个数
+        property var oddCards: [] // 记录要删除的卡片
         function push(item){
             var x = originX + margin;
-
-            // 判断是否换行
+            // 判断是否换行v
             if(x >= flow.width){
                 x = margin;
                 // 是否停止创建
@@ -34,23 +36,45 @@ Item {
                     builder.stop();
                     // 销毁最后一个（多余）
                     item.opacity = 0;
-                    /********************************* 开启销毁 *****************************/
+                    /********************************* 开启随机销毁 *****************************/
                     startDestroy();
+//                    startOddEvenDestroy();
                 }
                 // 更新originY
                 originY += (cardHeight + margin);
+
+                // 更新行
+                rowN += 1
+                columnN = 0
+            }else{
+                columnN += 1;
             }
             item.x = x;
             item.y = originY;
             // 保存
             cards.push(item);
-
             // 更新originX
             originX = x + cardWidth;
+            // 记录要删除的卡片的坐标
+            if(cards.length % 2 === 1){
+                oddCards.push(cards.length)
+            }
 
-//            console.log(parseInt(Math.random()*50))
-
+//            if(rowN % 2 === 0 && columnN % 2 === 1){
+//                oddCards.push(cards.length)
+//            }else if(rowN % 2 === 1 && columnN % 2 === 0){
+//                oddCards.push(cards.length)
+//            }
         }
+        // 销毁已经保存过的奇偶数组
+        function startOddEvenDestroy(){
+            for(var i =0 ;i < oddCards.length; i ++){
+                var idx = oddCards[i];
+                var itm = cards[idx];
+                itm.opacity = 0
+            }
+        }
+        // 随机销毁某个
         function startDestroy(){
             disappear.willStart(1,function start(){
                 var randomN = WaterFall.randomX(cards.length,selectNum)
@@ -66,11 +90,7 @@ Item {
                 newitm.z = itm.z
                 cards[randomN] = newitm
                 itm.opacity = 0
-
-
-//                resetCircle()
             })
-
         }
         function remove(idx){
             // 如果数组中没有卡片了，就启动添加
@@ -130,51 +150,11 @@ Item {
         }
         function resetCircle(){
             if(flow.selects.length === 0)return;
-
-//            var a = WaterFall.random(flow.selects.length)
-//            var b = WaterFall.random(flow.selects.length)
-//            if(a === b) return;
-
-//            var itemA = selects[a]
-//            var itemB = selects[b]
-
-//            var x = itemA.x,y = itemA.y,rotation = itemA.rotation
-
-
-
-//            itemA.x = itemB.x
-//            itemA.y = itemB.y
-//            itemA.rotation = itemB.rotation
-
-//            itemB.x = x
-//            itemB.y = y
-//            itemB.rotation = rotation
-//            var length = flow.selects.length
-//            for(var i = 0; i < length; i ++){
-//                var j = i + 1
-//                if(i === length - 1){
-//                    j = 0
-//                }
-//            }
-
-//            return;
             var length = flow.selects.length,angle = (360/length).toFixed(1)
             var halfWidth = flow.width*0.5,halfHeight = flow.height*0.5
             for(var k = 0; k < length; k ++){
                 var itm = selects[k]
                 var rotation = itm.rotation
-//                angle =  parseFloat(angle)
-//                console.log(typeof angle,typeof rotation)
-//                rotation += angle
-//                console.log(rotation)
-//                itm.rotation = itm.rotation + angle
-
-//                var x = halfWidth + (radius-20) * Math.sin(itm.rotation)
-//                var y = halfHeight - (radius-20) * Math.cos(itm.rotation)
-//                itm.z = 1000+k
-//                itm.x = x - cardWidth*0.5
-//                itm.y = y - cardHeight*0.5
-//                itm.scale = 0.8
             }
         }
         // parentW、parentH、childW、childH、item
@@ -191,8 +171,6 @@ Item {
             }
             callback(stat)
         }
-
-
        // 监听宽度变化，如果变化则需要进行重新布局
         onWidthChanged: {
 //            console.log(width)
@@ -212,7 +190,7 @@ Item {
                 Behavior on y { NumberAnimation { duration: flow.duration }}  // y 动画
                 Behavior on opacity { NumberAnimation { duration: flow.duration }}
                 Behavior on scale { NumberAnimation { duration: flow.duration }}
-//                Behavior on rotation { NumberAnimation { duration: flow.duration }}
+                Behavior on rotation { NumberAnimation { duration: flow.duration }}
 //                Behavior on width { NumberAnimation { duration: flow.duration }}
 //                Behavior on height { NumberAnimation { duration: flow.duration }}
                 // 先设置当opacity为0时，销毁
